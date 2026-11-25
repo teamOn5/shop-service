@@ -1,0 +1,45 @@
+name: Deploy (develop) with self hosted
+
+on:
+  push:
+    branches: [ develop ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+    defaults:
+      run:
+        shell: cmd
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Build & Test with Gradle
+        env:
+          GITHUB_USERNAME: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+        run: gradlew.bat clean build --no-daemon
+
+      - name: Prepare Docker Network and Clean Existing Container
+        run: |
+          docker network create spharos 2>nul
+          docker rm -f eureka 2>nul
+          exit /b 0
+
+      - name: Deploy Eureka with Docker Compose
+        run: docker compose up -d --build
+
+      - name: Verify Running Container
+        run: docker compose ps
