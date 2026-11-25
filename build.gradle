@@ -15,6 +15,14 @@ java {
 
 repositories {
 	mavenCentral()
+	maven {
+		name = "GithubPackages"
+		url = uri("https://maven.pkg.github.com/teamon5/common-module")
+		credentials {
+			username = System.getenv("GITHUB_USERNAME") ?: findProperty("githubUsername")
+			password = System.getenv("GITHUB_TOKEN") ?: findProperty("githubToken")
+		}
+	}
 }
 
 ext {
@@ -22,6 +30,7 @@ ext {
 }
 
 dependencies {
+	implementation 'com.teamon5:common-module:0.0.1'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
