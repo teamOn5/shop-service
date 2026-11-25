@@ -6,6 +6,7 @@ plugins {
 
 group = 'com.teamon5'
 version = '0.0.1-SNAPSHOT'
+description = "shop-service'
 
 java {
 	toolchain {
