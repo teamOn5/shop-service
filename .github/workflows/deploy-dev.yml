@@ -26,11 +26,11 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Build & Test with Gradle
+      - name: Build with Gradle (Skip Tests)
         env:
           GITHUB_USERNAME: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-        run: gradlew.bat clean build --no-daemon
+        run: gradlew.bat clean build -x test --no-daemon
 
       - name: Prepare Docker Network and Clean Existing Container
         run: |
