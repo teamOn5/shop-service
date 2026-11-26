@@ -38,3 +38,6 @@ out/
 
 # Local Gradle properties
 /gradle.properties
+
+.cursor
+
